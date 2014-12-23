@@ -22,10 +22,8 @@
   },
   "homepage": "https://github.com/concreted/memorybox",
   "devDependencies": {
-    "aliasify": "^1.5.0",
     "browserify": "^7.0.3",
     "commonjsify": "^0.1.4",
-    "exposify": "^0.2.0",
     "gulp": "^3.8.10",
     "gulp-concat": "^2.4.2",
     "gulp-jshint": "^1.9.0",
@@ -34,6 +32,8 @@
   },
   "dependencies": {
     "angular": "^1.3.8",
-    "sequelize": "^2.0.0-rc4"
+    "pg": "^4.1.1",
+    "sequelize": "^2.0.0-rc4",
+    "zurb-foundation-5": "^5.4.7"
   }
 }

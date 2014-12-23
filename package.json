@@ -6,6 +6,11 @@
   "scripts": {
     "test": "mocha spec"
   },
+  "aliasify": {
+    "aliases": {
+      "angular": "./bower_components/angular/angular.js"
+    }
+  }
   "repository": {
     "type": "git",
     "url": "https://github.com/concreted/memorybox.git"
@@ -15,5 +20,17 @@
   "bugs": {
     "url": "https://github.com/concreted/memorybox/issues"
   },
-  "homepage": "https://github.com/concreted/memorybox"
+  "homepage": "https://github.com/concreted/memorybox",
+  "devDependencies": {
+    "aliasify": "^1.5.0",
+    "browserify": "^7.0.3",
+    "gulp": "^3.8.10",
+    "gulp-concat": "^2.4.2",
+    "gulp-jshint": "^1.9.0",
+    "gulp-uglify": "^1.0.2",
+    "vinyl-transform": "^1.0.0"
+  },
+  "dependencies": {
+    "sequelize": "^2.0.0-rc4"
+  }
 }

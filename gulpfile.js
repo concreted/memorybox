@@ -5,6 +5,7 @@ var browserify = require('browserify');
 var transform = require('vinyl-transform');
 var uglify = require('gulp-uglify');
 var commonjsify = require('commonjsify');
+var nodemon = require('gulp-nodemon');
 
 var paths = {
   client: './client/src/app.js',
@@ -28,4 +29,21 @@ gulp.task('browserify', function() {
   .pipe(gulp.dest(paths.bundle));
 });
 
-gulp.task('default', ['browserify']);
+gulp.task('serve-dev', ['browserify'], function() {
+  nodemon({
+    script: 'server/server.js',
+    ext: 'js html',
+    env: {'NODE_ENV': 'development'}
+  });
+});
+
+gulp.task('serve', ['browserify'], function() {
+  nodemon({
+    script: 'server/server.js',
+    ext: 'js html',
+    env: {'NODE_ENV': 'production'}
+  });
+});
+
+gulp.task('dev', ['serve-dev']);
+gulp.task('default', ['serve']);

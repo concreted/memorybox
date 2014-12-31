@@ -1,7 +1,15 @@
-module.exports = routes;
+var express = require("express");
+var router = express.Router();
 
-function routes(app) {
-  app.get('/', function(req, res) {
-    res.send('Hello world');
-  });
-}
+var controllers = require('../controllers');
+
+router.use('/api', function(req, res) {
+  res.send('MemoryBox API');
+});
+
+console.log('-----------------------------')
+console.log(controllers)
+
+router.post('/auth/signup', controllers.auth.signup);
+
+module.exports = router;

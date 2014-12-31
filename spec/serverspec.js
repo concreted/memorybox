@@ -7,13 +7,17 @@ var chai = require('chai'),
 
 var app = require('../server/server.js');
 
+var db = require('../server/db');
+var Link = require('../server/models/link');
+var User = require('../server/models/user');
+
 // Test user for authentication and API testing.
 var user = {
-  username: 'test',
+  name: 'test',
   password: 'test'
 };
 
-describe('Client Unit Tests', function() {
+describe('Client Unit Tests:', function() {
   it('should serve memoryBox app on home route', function(done) {
     request(app)
       .get('/')
@@ -23,17 +27,37 @@ describe('Client Unit Tests', function() {
   });
 });
 
-describe('Authentication Tests', function() {
+describe('Authentication Tests:', function() {
   before(function(done) {
     // Delete test user from DB.
-    done();
+    User.find({
+      where: {name: 'test'}
+    }).success(function(found) {
+      found.destroy().success(function() {
+        done();
+      });
+    }).error(function() {
+      done();
+    });
   });
   describe('Signup', function() {
     it('should save user to db on /auth/signup', function(done) {
       request(app)
         .post('/auth/signup')
         .send(user)
-        .expect(200, done);
+        .expect(200, function() {
+          // console.log('SHOULD CHECK WHETHER TEST USER IN DB');
+          User.find({
+            where: {name: user.name}
+          }).then(function(found) {
+            assert(found !== null, 'Should find test user');
+            assert(found.name === user.name, 'Username should be user');
+            assert(found.password !== user.password, 'Password should be hashed: ' + found.password);
+            done();
+          }).catch(function(err) {
+            done(err);
+          });
+        });
     });
     it('should not save duplicate user to db on /auth/signup', function(done) {
       request(app)
@@ -45,7 +69,15 @@ describe('Authentication Tests', function() {
   describe('Login', function() {
     before(function(done) {
       // Delete invalid user from DB.
-      done();
+      User.find({
+        where: {name: 'bad'}
+      }).then(function(found) {
+        found.destroy().success(function() {
+          done();
+        });
+      }).error(function() {
+        done();
+      });
     });
     it('should 403 on invalid login to /auth/login', function(done) {
       request(app)
@@ -63,7 +95,7 @@ describe('Authentication Tests', function() {
   });
 });
 
-describe('API Unit Tests', function() {
+describe('API Unit Tests:', function() {
   var token = null;
   var badToken = 'i am a bad token';
   var apiRoute = '/api/' + user.username;
